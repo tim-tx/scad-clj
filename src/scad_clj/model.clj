@@ -169,8 +169,16 @@
 (defn hull [ & block]
   `(:hull  ~@block))
 
-(defn offset [r & block]
-  `(:offset {:r ~r} ~@block))
+(defn offset [args & block]
+  (cond
+    (number? args)
+    (let [r args]
+      `(:offset {:r ~r} ~@block))
+    (map? args)
+    `(:offset ~args ~@block)))
+
+;; (defn offset [r & block]
+  ;; `(:offset {:r ~r} ~@block))
 
 (defn minkowski [ & block]
   `(:minkowski ~@block))

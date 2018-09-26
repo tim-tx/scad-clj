@@ -204,9 +204,16 @@
    (mapcat #(write-expr (inc depth) %1) block)
    (list (indent depth) "}\n")))
 
-(defmethod write-expr :offset [depth [form {:keys [r]} & block]]
+(defmethod write-expr :offset [depth [form {:keys [r delta chamfer]} & block]]
   (concat
-   (list (indent depth) "offset (r = " r ") {\n")
+   (list (indent depth)
+         "offset ("
+         (join ","
+               (remove nil?
+                       [(if (not (nil? r)) (str "r = " r))
+                        (if (not (nil? delta)) (str "delta = " delta))
+                        (if (not (nil? chamfer)) (str "chamfer = " chamfer))]))
+         ") {\n")
    (mapcat #(write-expr (inc depth) %1) block)
    (list (indent depth) "}\n")))
 
